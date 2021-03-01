@@ -269,7 +269,7 @@ new Vue({
     },
     mounted() {
         axios
-            .get
+            .get('127.0.0.1:8000/songoftheday/')
             .then(response => {
                 this.songoftheday = response.data[0];
             });
