@@ -202,17 +202,17 @@ from .models import Busqueda,Resultado
           </code></pre>
           </div>
           <p>Importamos los shortcuts de django para manejar los templates (Render, redirect, reverse_lazy).<br>
-          Paginator para la paginación de los resultados.
-          Las vistas genericas que nos ayudan a crear nuestro CRUD:<br>
-          Create: CreateView<br>
-          Read: ListView<br>
-          Update: UpdateView<br>
-          Delete: DeleteView<br>
-          Los forms y models que creamos anteriormente.</p>
-          
+            Paginator para la paginación de los resultados.
+            Las vistas genericas que nos ayudan a crear nuestro CRUD:<br>
+            Create: CreateView<br>
+            Read: ListView<br>
+            Update: UpdateView<br>
+            Delete: DeleteView<br>
+            Los forms y models que creamos anteriormente.</p>
 
-            <p>Creamos las clases especificando modelo, template y form_class (en create, update)</p>
-            <div class="highlight">
+
+          <p>Creamos las clases especificando modelo, template y form_class (en create, update)</p>
+          <div class="highlight">
             <pre><code>
 class busqueda(ListView):   
     model = Busqueda
@@ -259,77 +259,277 @@ class EliminarBusqueda(DeleteView):
     template_name = 'busqueda_confirm_delete.html'
             </code></pre>
           </div>
-            <p>En las clases busqueda y resultados, se obtiene la consulta de sus respectivos modelos filtrando segun el usuario logeado en el momento(request.user). <br>A su vez cuando un usuario crea una busqueda con la clase CrearBusqueda, antes de guardar el formulario(form.save), se asigna el usuario logeado en el momento.<br> Esto nos permite que los resultados y busquedas sean asignados a cada usuario.</p><br>
+          <p>En las clases busqueda y resultados, se obtiene la consulta de sus respectivos modelos filtrando segun el
+            usuario logeado en el momento(request.user). <br>A su vez cuando un usuario crea una busqueda con la clase
+            CrearBusqueda, antes de guardar el formulario(form.save), se asigna el usuario logeado en el momento.<br>
+            Esto nos permite que los resultados y busquedas sean asignados a cada usuario.</p><br>
 
           <h5>Templates</h5>
 
-          <p>Busqueda.html representa una tabla de todas las busquedas existentes, y tambien provee los links para modificar/eliminar/crear</p>
+          <p>Busqueda.html representa una tabla de todas las busquedas existentes, y tambien provee los links para
+            modificar/eliminar/crear</p>
           <div class="highlight">
             <xmp>
-<section class="hero is-fullheight">
-  <div class="container">
-    <a href="crear_busqueda" class="button is-primary">Crear nueva busqueda</a>
-    <table class="table is-striped">
-      <thead>
-        <tr>
-          <th>Búsquedas</th>
-          <th>Precio Mínimo</th>
-          <th>Precio Máximo</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for busqueda in object_list %}
-        <tr>
-          <td> {{ busqueda.busqueda }}</td>
-          <td> {{ busqueda.precio_min }}</td>
-          <td> {{ busqueda.precio_max }}</td>
-          <td> <a class="button is-primary" href="{% url 'editar_busqueda' busqueda.id %}">Editar</a></td>
-          <td> <a class="button is-danger" href="{% url 'eliminar_busqueda' busqueda.id %}">Eliminar</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</section>
-          </xmp>
-          </div> 
-<p>Creamos el formulario del template crear_busqueda.html. En cada input debemos asignar el name de acuerdo a los campos que especificamos en forms.py. <br>Además con request.resolver_match.url_name obtenemos el nombre de la url accedida, para identificar si el usuario accedió para editar o crear la busqueda. En el caso del primero se establece el value. </p>
-<div class="highlight">
-          <xmp>
-<form method="POST">
-  {% csrf_token %}
-  <div class="field">
-      <label class="label">Búsqueda</label>
-      <div class="control">
-          {% with url_name=request.resolver_match.url_name %}
-          <input class="input" type="text" name="busqueda"
-              value="{% if url_name == 'editar_busqueda' %}{{ busqueda.busqueda }}{% endif %}">
-      </div>
-  </div>
-  <div class="field">
-      <label class="label">Precio Mínimo</label>
-      <div class="control">
-          <input class="input" type="number" name="precio_min"
-              value="{% if url_name == 'editar_busqueda' %}{{ busqueda.precio_min }}{% endif %}">
-      </div>
-  </div>
-  <div class="field">
-      <label class="label">Precio Máximo</label>
-      <div class="control">
-          <input class="input" type="number" name="precio_max"
-              value="{% if url_name == 'editar_busqueda' %}{{ busqueda.precio_max }}{% endif %}">
-      </div>
-      {% endwith %}
-  </div>
-  <button type="submit" class="button is-link">Crear</button>
-</form>         
-          </xmp> 
-          </div> 
+              <section class="hero is-fullheight">
+                <div class="container">
+                  <a href="crear_busqueda" class="button is-primary">Crear nueva busqueda</a>
+                  <table class="table is-striped">
+                    <thead>
+                      <tr>
+                        <th>Búsquedas</th>
+                        <th>Precio Mínimo</th>
+                        <th>Precio Máximo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for busqueda in object_list %}
+                      <tr>
+                        <td> {{ busqueda.busqueda }}</td>
+                        <td> {{ busqueda.precio_min }}</td>
+                        <td> {{ busqueda.precio_max }}</td>
+                        <td> <a class="button is-primary" href="{% url 'editar_busqueda' busqueda.id %}">Editar</a></td>
+                        <td> <a class="button is-danger" href="{% url 'eliminar_busqueda' busqueda.id %}">Eliminar</a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </xmp>
+          </div>
+          <p>Creamos el formulario del template crear_busqueda.html. En cada input debemos asignar el name de acuerdo a
+            los campos que especificamos en forms.py. <br>Además con request.resolver_match.url_name obtenemos el nombre
+            de la url accedida, para identificar si el usuario accedió para editar o crear la busqueda. En el caso del
+            primero se establece el value. </p>
+          <div class="highlight">
+            <xmp>
+              <form method="POST">
+                {% csrf_token %}
+                <div class="field">
+                  <label class="label">Búsqueda</label>
+                  <div class="control">
+                    {% with url_name=request.resolver_match.url_name %}
+                    <input class="input" type="text" name="busqueda"
+                      value="{% if url_name == 'editar_busqueda' %}{{ busqueda.busqueda }}{% endif %}">
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Precio Mínimo</label>
+                  <div class="control">
+                    <input class="input" type="number" name="precio_min"
+                      value="{% if url_name == 'editar_busqueda' %}{{ busqueda.precio_min }}{% endif %}">
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Precio Máximo</label>
+                  <div class="control">
+                    <input class="input" type="number" name="precio_max"
+                      value="{% if url_name == 'editar_busqueda' %}{{ busqueda.precio_max }}{% endif %}">
+                  </div>
+                  {% endwith %}
+                </div>
+                <button type="submit" class="button is-link">Crear</button>
+              </form>
+            </xmp>
+          </div>
 
+          <p> Por último, al igual que las búsquedas, listamos los resultados con un for y creamos la paginación que
+            especificamos antes en las vistas.</p>
 
+          <div class="highlight">
+            <xmp>
+              <table class="table is-striped is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Resultados</th>
+                    <th>Título</th>
+                    <th>Precio</th>
+                    <th>Link</th>
+                    <th>Fecha de publicación encontrada</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for resultado in resultados %}
+                  <tr>
+                    <td> {{ resultado.busqueda}}</td>
+                    <td> {{ resultado.titulo }}</td>
+                    <td> {{ resultado.precio }}</td>
+                    <td> <a href="{{ resultado.link }}" target="_blank">Link</a></td>
+                    <td> {{ resultado.fecha }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% comment %} Paginacion {% endcomment %}
+              <nav class="pagination" role="navigation" aria-label="pagination">
+                {% if page_obj.has_previous %}
+                <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% else %}
+                <a class="pagination-previous" disabled>Anterior</a>
+                {% endif %}
 
+                {% if page_obj.has_next %}
+                <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                {% else %}
+                <a class="pagination-next" disabled>Siguiente</a>
+                {% endif %}
+              </nav>
+            </xmp>
+          </div>
+          <br>
+
+          <h5>Script.py</h5>
+
+          <p>El script que consulta la API de mercadolibre esta escrito en python, y se ejecuta cada una hora.</p>
+          <p>Para empezar seteamos todo para que funcione con django, importamos los modelos, la funcion search_ml, y
+            las librerias necesarias para enviar mails.</p>
+          <div class="highlight">
+            <pre><code>
+#!/usr/bin/python
+# encoding: utf-8
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'EncuentraLibre.settings.production')
+django.setup()
+
+from apiforms.models import Busqueda, Resultado, Usuario
+from MethodsML import search_ml
+from email.mime.text import MIMEText
+from email.header import Header
+import smtplib
+        </code></pre>
+          </div>
+          <p>Acto seguido extraemos el id de todos los usuarios y creamos un for para definir cuantas veces vamos a repetir el proceso. Extraemos las busquedas filtrando por cada usuario. Y a su vez lo ponemos en otro for, este for va a ser de acuerdo a la cantidad de busquedas(correspondiente al usuario).</p>
+
+          <p>Extraemos los ids en los resultados. Esto nos va a ayudar a comparar si lo que extraemos de la API de mercadolibre ya estan en nuestra tabla de resultados.</p>
+          <p>Convertimos las variables precio_min, precio_max en flotantes. Esto se debe a como se tiene que escribir en la url de mercadolibre. Además llamamos a la función search_ml pasando los parámetros.</p>
+          
+          <div class="highlight">
+            <pre><code>
+usuarios_id=list(Usuario.objects.values('id'))
+
+#for de la cantidad de usuarios totales
+for usuario_id in usuarios_id:
+    
+    Buscar=list(Busqueda.objects.values().filter(usuario_id=usuario_id['id']))
+
+    results=[]
+    #for de la cantidad de busquedas de cada usuario
+    for i in range(len(Buscar)):
+       
+        idss=list(Resultado.objects.values('ids').filter(usuario_id=usuario_id['id']))
+        ids=[d['ids'] for d in idss]
+
+        precio_min=float(Buscar[i]['precio_min'])
+        precio_max=float(Buscar[i]['precio_max'])
+
+        search_raw=search_ml(Buscar[i]['busqueda'], precio_min, precio_max)
+
+</code></pre>
+          </div>
+          <p>Para que el url que consulta la api de mercadolibre, reemplazamos con la función replace los espacios en blanco con %20. Luego seteamos al url. Establecemos el query, el limit maximo es 50, los rangos de precio(precio_min, precio_max), el item_condition que esta seteado como articulo usado, y el offset nos va a ayudar a recorrer todas las paginas del articulo.</p>
+          <p>Calculamos la cantidad de páginas del artículo(para no recorrer mas de las necesarias), y establecemos un for. Mediante la libreria request consumimos la rest API, b es multiplicado por 50 debido a que el limite de cada consulta es de 50.</p>
+          <p>Por último agregamos a una lista las claves r["results"] donde estan los valores que nos importan y la retornamos.</p>
+          <div class="highlight">
+            <pre><code>
+import requests as rq
+import time
+
+def search_ml(search, precio_min, precio_max):
+    busqueda=search.replace(" ", "%20")
+    l=[]
+    url="https://api.mercadolibre.com/sites/MLA/search?q={}&limit=50&price={}-{}&ITEM_CONDITION=2230581&offset=".format(busqueda, precio_min, precio_max)
+    
+    request_total=rq.get(url+'0').json()
+
+    if request_total["paging"]["total"]<=50:
+        num_paginas=1
+    elif request_total["paging"]["total"]<=100:
+        num_paginas=2
+    elif request_total["paging"]["total"]<=150:
+        num_paginas=3
+    elif request_total["paging"]["total"]<=150:
+        num_paginas=3
+    elif request_total["paging"]["total"]<=200:
+        num_paginas=4
+    elif request_total["paging"]["total"]<=250:
+        num_paginas=5
+    elif request_total["paging"]["total"]<=300:
+        num_paginas=6
+    elif request_total["paging"]["total"]<=350:
+        num_paginas=7
+    elif request_total["paging"]["total"]<=400:
+        num_paginas=8
+    elif request_total["paging"]["total"]<=450:
+        num_paginas=9
+    else:
+        num_paginas=10
+    
+    time.sleep(7)
+    for b in range(num_paginas):  
+        r=rq.get(url+str(b*50)).json()
+        time.sleep(7)    
+
+        for a in r["results"]:
+            l.append(a)
+    return l
+    </code></pre>
+          </div>
+          <p>Cabe mencionar que los time.sleep nos ayudan a que no hayan tantas consultas simultaneas(La API de mercadolibre bloquea temporalmente si se producen muchas consultas a la vez).</p>
+          <p>Volvemos al archivo script.py. Obtenemos la instancia del usuario, el id de la busqueda, y el mail del usuario.</p>
+          <p>Recorremos las publicaciones en un for, y comparamos si las publicaciones que encontramos no estan en la tabla de resultados (los ids son una clave unica que cada publicacion de mercadolibre posee). En este for agregamos a una lista los links nuevos(nos va a servir saber si enviar mail o no), y luego los guardamos todos los datos en la tabla Resultado.</p>
+
+          <p>Por último esta el ultimo if, en este prevenimos que no envíe por mail demasiados resultados. Intentamos(try) enviar el mail, estableciendo todo lo necesario. En caso de que no se pueda (except) imprimimos un mensaje para saber cual dio error.</p>
+          <div class="highlight">
+            <pre><code>
+        usuario_instance=Usuario.objects.get(id=usuario_id['id'])
+        busqueda_id=Busqueda.objects.filter(busqueda=Buscar[i]['busqueda']).first()
+        usuario_email=Usuario.objects.values('email').filter(id=usuario_id['id'])
+        
+        publicaciones=[]
+
+        for publication in search_raw:
+            publicaciones.append(publication)
+                    
+        publicaciones_mostrar=[]
+        for b in range(len(publicaciones)):  
+            if publicaciones[b]["id"] not in ids:        
+                id_producto=publicaciones[b]["id"]
+                titulo=publicaciones[b]["title"]
+                precio=publicaciones[b]["price"]
+                link=publicaciones[b]["permalink"]
+                
+                publicaciones_mostrar.append(link)
+
+                Articulos_agregar= Resultado(busqueda=busqueda_id, ids=id_producto, titulo=titulo, precio=precio, link=link, usuario=usuario_instance)
+                Articulos_agregar.save()
+                
+        if len(publicaciones_mostrar)<=10 and len(publicaciones_mostrar)>0:
+            try:    
+                server = smtplib.SMTP("mail.encuentralibre.com.ar", 26)#port
+                server.ehlo()
+                server.starttls()
+                server.login('mail', "password")
+                body = 'Se encontro una/unas publicación/nes: '+'\n' .join(publicaciones_mostrar)
+                msg = MIMEText(body,'plain','utf-8')
+                subject = 'Publicacion/es encontrada'
+                msg["Subject"] = Header(subject, 'utf-8')
+                From = 'mail'
+                to = usuario_email[0]['email']
+                msg["From"] = Header(From, 'utf-8')
+                msg["To"] = Header(to, 'utf-8')
+                txt = msg.as_string()
+                server.sendmail(From, to, txt)
+                print('Se envio mail a ' + usuario_email[0]['email'])
+            except:
+                print('no se pudo enviar el mail a ' + usuario_email[0]['email'])
+         </code></pre>
+          </div>
 
         </div>
+
 
       </div>
     </section><!-- End Portfolio Details Section -->
