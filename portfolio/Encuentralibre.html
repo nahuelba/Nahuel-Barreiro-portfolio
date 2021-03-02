@@ -14,7 +14,9 @@
   <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -30,10 +32,10 @@
 
 </head>
 
-<body>  
+<body>
 
 
-<!-- ======= Mobile nav toggle button ======= -->
+  <!-- ======= Mobile nav toggle button ======= -->
   <button type="button" class="mobile-nav-toggle d-xl-none"><i class="icofont-navigation-menu"></i></button>
 
   <!-- ======= Header ======= -->
@@ -44,7 +46,8 @@
         <img src="https://i.ibb.co/Nmh4pYB/profileimg.jpg" alt="Nahuel Barreiro" class="img-fluid rounded-circle">
         <h1 class="text-light"><a href="index.html">Nahuel Barreiro</a></h1>
         <div class="social-links mt-3 text-center">
-          <a href="https://www.linkedin.com/in/nahuel-barreiro-03840919b/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+          <a href="https://www.linkedin.com/in/nahuel-barreiro-03840919b/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
         </div>
       </div>
 
@@ -58,7 +61,7 @@
 
     </div>
   </header><!-- End Header -->
-  
+
   <main id="main">
 
     <!-- ======= Breadcrumbs ======= -->
@@ -91,10 +94,11 @@
           <div class="portfolio-info">
             <h3>Información del proyecto</h3>
             <ul>
-             <li><strong>URL</strong>: <a href="http://www.encuentralibre.com.ar/" target="_blank">encuentralibre.com.ar</a></li>
+              <li><strong>URL</strong>: <a href="http://www.encuentralibre.com.ar/" target="_blank">Link</a></li>
               <li><strong>Fecha del proyecto</strong>: 14 Agosto, 2020</li>
-              <li><strong>Código en Github</strong>: </br> <a href="https://github.com/nahuelba/encuentralibre.git" target="_blank">https://github.com/nahuelba/encuentralibre.git</a> </li>
-              
+              <li><strong>Código en Github</strong>: <a href="https://github.com/nahuelba/encuentralibre"
+                  target="_blank">Link</a> </li>
+
             </ul>
           </div>
 
@@ -102,9 +106,229 @@
 
         <div class="portfolio-description">
           <h2>Proyecto personal Encuentralibre</h2>
+          <br>
+
+          <h4>Breve descripción del proyecto</h4>
           <p>
-            Página web que ejecuta un script (hecho en python) cada una hora, consumiendo la API publica de Mercadolibre (<a href="https://api.mercadolibre.com" target="_blank">api.mercadolibre.com</a>). Este script compara las publicaciones ya existentes en la base de datos, si encuentra nuevas las almacena y envia el mail de aviso correspondiente a la cuenta creada. </br></br>Se utilizó para el Backend <strong> Django</strong> y para el Frontend <strong>Bulma css</strong>. La libreria <strong>Requests</strong> de Python. 
+            Página web donde el usuario establece una búsqueda y un rango de precio, la app consulta a la api de
+            mercadolibre y envía mail si se encontró un resultado nuevo.
           </p>
+          <br>
+
+
+          <h4>Tecnologías utilizadas</h4>
+
+          <p>
+            A continuación se muestra un listado de las tecnologías usadas:</p>
+          <ul>
+            <li>Django 3.0.8</li>
+            <li>requests 2.24.0</li>
+            <li>Bulma css 0.9.0</li>
+          </ul><br>
+
+
+          <h4>Explicación del proyecto</h4>
+
+          <p>A continuación se muestra un diagrama de como esta construido el proyecto. Obedece a un patrón de
+            Modelo-Vista-Template.</p>
+
+          <img src="../assets/img/portfolio/Encuentralibre-general.jpg" class="img-fluid" alt="">
+
+          <p>Adicionalmente hay un script (ejecutándose cada una hora) que llena la base de datos, además de enviar
+            mails, dependiendo las configuraciones de cada usuario.</p>
+
+          <br>
+
+          <h5>Modelos</h5>
+          <p>Existen dos modelos. Uno destinado a la busqueda, donde el usuario ingresa una búsqueda, un precio mínimo y
+            máximo. Y otro para los resultados, este se va a llenar automáticamente con el script ejecutándose cada una
+            hora.</p>
+          <div class="highlight">
+            <pre><code>
+class Busqueda(models.Model):
+    busqueda=models.CharField(max_length=30)
+    precio_min=models.IntegerField(verbose_name="Precio mínimo")
+    precio_max=models.IntegerField(verbose_name="Precio máximo")
+    usuario= models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.busqueda
+
+class Resultado(models.Model):
+    busqueda=models.ForeignKey(Busqueda, on_delete=models.CASCADE)
+    ids=models.CharField(max_length=30)
+    titulo=models.CharField(max_length=80)
+    precio=models.IntegerField()
+    link=models.URLField(max_length=200)
+    fecha=models.DateTimeField(auto_now_add=True)
+    usuario= models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-fecha']
+        </code></pre>
+          </div>
+          <p>Cabe destacar que los resultados se ordenan de acuerdo a la fecha más reciente, esto nos ayuda a mostrarlos
+            correctamente en el interfaz del usuario.</p>
+
+
+          <br>
+
+          <h5>Forms</h5>
+
+          <p>A partir de los modelos podemos crear los forms con la herramienta API forms que nos ofrece django, en el
+            archivo forms.py</p>
+          <div class="highlight">
+            <pre><code>
+from django import forms
+from .models import Busqueda, Resultado
+
+class BusquedaForm(forms.ModelForm):
+    class Meta:
+        model = Busqueda
+        fields = ['busqueda', 'precio_min', 'precio_max']
+         </code></pre>
+          </div>
+          <br>
+          <h5>Vistas</h5>
+          <p>Empezamos con las importaciones</p>
+          <div class="highlight">
+            <pre><code>
+from django.shortcuts import render,redirect
+from django.urls import reverse_lazy
+from django.core.paginator import Paginator
+from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+from .forms import BusquedaForm
+from .models import Busqueda,Resultado
+          </code></pre>
+          </div>
+          <p>Importamos los shortcuts de django para manejar los templates (Render, redirect, reverse_lazy).<br>
+          Paginator para la paginación de los resultados.
+          Las vistas genericas que nos ayudan a crear nuestro CRUD:<br>
+          Create: CreateView<br>
+          Read: ListView<br>
+          Update: UpdateView<br>
+          Delete: DeleteView<br>
+          Los forms y models que creamos anteriormente.</p>
+          
+
+            <p>Creamos las clases especificando modelo, template y form_class (en create, update)</p>
+            <div class="highlight">
+            <pre><code>
+class busqueda(ListView):   
+    model = Busqueda
+    template_name= 'Busqueda.html'
+    
+    def get(self, request,*args, **kwargs):
+        queryset=Busqueda.objects.filter(usuario=request.user)
+        contexto={
+            'object_list':queryset
+        }
+        return render(request, self.template_name, contexto)
+
+class EditarBusqueda(UpdateView):
+    model = Busqueda
+    template_name = 'crear_busqueda.html'
+    form_class= BusquedaForm
+    success_url= reverse_lazy('Busquedas')
+
+class CrearBusqueda(CreateView):
+    model = Busqueda
+    form_class=BusquedaForm
+    template_name='crear_busqueda.html'
+    
+    def post(self,request,*args,**kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            Busqueda = form.save(commit=False) 
+            Busqueda.usuario = request.user  
+            Busqueda.save()
+            return redirect('Busquedas')
+
+class Resultados(ListView):
+    model = Resultado
+    template_name='resultados.html'
+    context_object_name='resultados'
+    paginate_by = 15  
+    
+    def get_queryset(self):
+        return Resultado.objects.filter(usuario=self.request.user)
+
+class EliminarBusqueda(DeleteView):
+    model = Busqueda
+    success_url=reverse_lazy('Busquedas')
+    template_name = 'busqueda_confirm_delete.html'
+            </code></pre>
+          </div>
+            <p>En las clases busqueda y resultados, se obtiene la consulta de sus respectivos modelos filtrando segun el usuario logeado en el momento(request.user). <br>A su vez cuando un usuario crea una busqueda con la clase CrearBusqueda, antes de guardar el formulario(form.save), se asigna el usuario logeado en el momento.<br> Esto nos permite que los resultados y busquedas sean asignados a cada usuario.</p><br>
+
+          <h5>Templates</h5>
+
+          <p>Busqueda.html representa una tabla de todas las busquedas existentes, y tambien provee los links para modificar/eliminar/crear</p>
+          <div class="highlight">
+            <xmp>
+<section class="hero is-fullheight">
+  <div class="container">
+    <a href="crear_busqueda" class="button is-primary">Crear nueva busqueda</a>
+    <table class="table is-striped">
+      <thead>
+        <tr>
+          <th>Búsquedas</th>
+          <th>Precio Mínimo</th>
+          <th>Precio Máximo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for busqueda in object_list %}
+        <tr>
+          <td> {{ busqueda.busqueda }}</td>
+          <td> {{ busqueda.precio_min }}</td>
+          <td> {{ busqueda.precio_max }}</td>
+          <td> <a class="button is-primary" href="{% url 'editar_busqueda' busqueda.id %}">Editar</a></td>
+          <td> <a class="button is-danger" href="{% url 'eliminar_busqueda' busqueda.id %}">Eliminar</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+          </xmp>
+          </div> 
+<p>Creamos el formulario del template crear_busqueda.html. En cada input debemos asignar el name de acuerdo a los campos que especificamos en forms.py. <br>Además con request.resolver_match.url_name obtenemos el nombre de la url accedida, para identificar si el usuario accedió para editar o crear la busqueda. En el caso del primero se establece el value. </p>
+<div class="highlight">
+          <xmp>
+<form method="POST">
+  {% csrf_token %}
+  <div class="field">
+      <label class="label">Búsqueda</label>
+      <div class="control">
+          {% with url_name=request.resolver_match.url_name %}
+          <input class="input" type="text" name="busqueda"
+              value="{% if url_name == 'editar_busqueda' %}{{ busqueda.busqueda }}{% endif %}">
+      </div>
+  </div>
+  <div class="field">
+      <label class="label">Precio Mínimo</label>
+      <div class="control">
+          <input class="input" type="number" name="precio_min"
+              value="{% if url_name == 'editar_busqueda' %}{{ busqueda.precio_min }}{% endif %}">
+      </div>
+  </div>
+  <div class="field">
+      <label class="label">Precio Máximo</label>
+      <div class="control">
+          <input class="input" type="number" name="precio_max"
+              value="{% if url_name == 'editar_busqueda' %}{{ busqueda.precio_max }}{% endif %}">
+      </div>
+      {% endwith %}
+  </div>
+  <button type="submit" class="button is-link">Crear</button>
+</form>         
+          </xmp> 
+          </div> 
+
+
+
+
         </div>
 
       </div>
@@ -113,7 +337,7 @@
   </main><!-- End #main -->
 
 
- <!-- ======= Footer ======= -->
+  <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
       <div class="copyright">
