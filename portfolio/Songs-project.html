@@ -95,11 +95,13 @@
                     <div class="portfolio-info">
                         <h3>Información del proyecto</h3>
                         <ul>
-                            <li><strong>URL</strong>: <a href="http://songs.encuentralibre.com.ar/"
+                            <li><strong>URL</strong>: <a href="https://nahuelba.github.io/Songs-project-Frontend/"
                                     target="_blank">Link</a></li>
-                            <li><strong>Fecha del proyecto</strong>: 27 Febrero, 2021</li>
-                            <li><strong>Código en Github</strong>: <a href="https://github.com/nahuelba/Songs-project"
-                                    target="_blank">Link</a> </li>
+                            <li><strong>Fecha del proyecto</strong>: 22 Marzo, 2021</li>
+                            <li><strong>Código en Github</strong>: <br><a href="https://github.com/nahuelba/Songs-project-Backend/"
+                                    target="_blank">Backend (Django)</a> <br> 
+                                    <a href="https://github.com/nahuelba/Songs-project-Frontend/tree/gh-pages/Code"
+                                    target="_blank">Frontend (React)</a></li>
 
                         </ul>
                     </div>
@@ -113,9 +115,9 @@
                     <h4>Breve descripción del proyecto</h4>
 
                     <p>
-                        Esta página se muestran dos proyectos. La primera muestra una canción por día, pudiendo
+                        Esta página es una app que consiste en mostrar una canción por día, pudiendo
                         seleccionar varios interpretes y, a su vez, varias plataformas para reproducir esas versiones
-                        (spotify y youtube). La segunda corresponde a un buscador reactivo de partituras almacenadas.
+                        (spotify y youtube). Esta información es creada mediante una api con django rest framework, y consumida por React.
                     </p>
                     <br>
 
@@ -125,26 +127,25 @@
                     <p>
                         A continuación se muestra un listado de las tecnologías usadas:</p>
                     <ul>
-                        <li>Django 3.1.6</li>
+                        <li>Django</li>
                         <ul>
-                            <li>Django rest-framework 3.12.2</li>
-                            <li>Pillow 8.1.0</li>
+                            <li>Django rest-framework</li>
+                            <li>Pillow</li>
                         </ul>
-
-                        <li>Bulma css 0.9.1</li>
-                        <li>Font Awesome 5.15.2</li>
-                        <li>vue js 2.6.12</li>
+                    
+                        <li>React</li>
                         <ul>
-                            <li>axios 0.21.1</li>
+                            <li>Material-ui</li>
                         </ul>
                     </ul><br>
 
 
 
                     <h4>Explicación del proyecto</h4>
+                    <!--
                     Aqui vemos como se estructura django rest-framework(backend) para que con ayuda de vue js (frontend)
                     pueda obtener los datos de los modelos.
-                    <img src="../assets/img/portfolio/Explicacion-project.jpg" class="img-fluid my-5" alt="">
+                    <img src="../assets/img/portfolio/Explicacion-project.jpg" class="img-fluid my-5" alt="">-->
                     <h5>Modelos</h5>
                     <p>Este gráfico representa los modelos existentes en este proyecto y sus relaciones.</p>
 
@@ -253,9 +254,9 @@ urlpatterns = [
                     </div>
 
                     <p>Ya podemos acceder a las api mediante las urls. Estas urls van a servir para obtener información
-                        mas adelante con vue js.</p>
+                        mas adelante con React.</p>
 
-
+<!--
                     <h5>Vue js</h5>
                     <p>Con vue js ya podemos consumir la API segun lo necesitemos, mediante la libreria axios.</p>
                     <div class="highlight">
@@ -295,7 +296,7 @@ new Vue({
                 <img src="../assets/img/portfolio/interpreters-render.jpg" class="img-fluid" alt="">
 
 
-            </div>
+            </div>-->
         </section><!-- End Portfolio Details Section -->
 
     </main><!-- End #main -->
