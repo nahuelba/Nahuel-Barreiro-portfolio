@@ -165,14 +165,19 @@ from songoftheday.models import InterpreterModel, LinksSongsModel, SongModel
 class interpreterSerializer(serializers.ModelSerializer):
     class Meta:
         model = InterpreterModel
-        fields = '__all__'
+        fields = ['interpreter_name', 'interpreter_image']
 
 class LinkSongsSerializer(serializers.ModelSerializer):
+    interpreters = interpreterSerializer(many=True)
+
     class Meta:
         model  = LinksSongsModel
-        fields= '__all__'
+        exclude = ['id', 'song_title']
 
 class SongSerializer(serializers.ModelSerializer):
+    composer= interpreterSerializer()
+    links = LinkSongsSerializer(many=True)
+    
     class Meta:
         model = SongModel
         fields=  '__all__'
@@ -185,8 +190,8 @@ class SongSerializer(serializers.ModelSerializer):
                     <div class="highlight">
                         <pre><code>
 from rest_framework.generics import ListAPIView
-from songoftheday.models import InterpreterModel, LinksSongsModel, SongModel
-from songoftheday.api.serializers import interpreterSerializer, LinkSongsSerializer, SongSerializer
+from songoftheday.models import SongModel
+from songoftheday.api.serializers import SongSerializer
 from datetime import datetime
                     </code></pre>
                     </div>
@@ -196,27 +201,6 @@ from datetime import datetime
 
                     <div class="highlight">
                         <pre><code>
-class InterpreterListAPIView(ListAPIView):
-
-    serializer_class = interpreterSerializer
-
-    def get_queryset(self):
-        return InterpreterModel.objects.all()
-
-class LinksSongsListAPIView(ListAPIView):
-
-    serializer_class = LinkSongsSerializer
-
-    def get_queryset(self):
-        return LinksSongsModel.objects.all()
-
-class SongListAPIView(ListAPIView):
-
-    serializer_class = SongSerializer
-
-    def get_queryset(self):
-        return SongModel.objects.all()
-
 class SongofthedayListAPIView(ListAPIView):
 
     serializer_class = SongSerializer
@@ -237,7 +221,7 @@ class SongofthedayListAPIView(ListAPIView):
                     <div class="highlight">
                         <pre><code>
 from django.urls import path
-from .api import InterpreterListAPIView,  LinksSongsListAPIView, SongListAPIView, SongofthedayListAPIView
+from .api import SongofthedayListAPIView
                 </code></pre>
 
                     </div>
@@ -245,10 +229,8 @@ from .api import InterpreterListAPIView,  LinksSongsListAPIView, SongListAPIView
                     <div class="highlight">
                         <pre><code>
 urlpatterns = [
-    path("song/", SongListAPIView.as_view(), name="song_api"),
-    path("song/links/", LinksSongsListAPIView.as_view(), name="links_api"),
-    path("song/links/interpreter/", InterpreterListAPIView.as_view(), name="interpreter_api"),
     path("songoftheday/", SongofthedayListAPIView.as_view(), name="songoftheday_api")
+
 ]
                 </code></pre>
                     </div>
