@@ -1,0 +1,24 @@
+<nav class="py-auto">
+    <!-- <ul >
+       <li><span class="material-icons" routerLink="/"  >home</span></li>
+       <li><span class="material-icons" routerLink="/about">face</span></li>
+       <li><span class="material-icons" routerLink="/portfolio">featured_play_list</span></li>
+       <li><span class="material-icons" routerLink="/contact">email</span></li>
+    </ul> -->
+    <div class="menu">
+        <input type="checkbox"  id="toggle" (change)="sidebar=!sidebar;">
+        <label for="toggle" class="my-auto"></label>
+    </div>
+</nav>
+
+<div class="sidebar" [ngStyle]="{'width': (sidebar ? '250px' : '0px')}" >
+    <ul>
+        <li routerLink="/" >Home</li>
+        <li routerLink="/about" >About</li>
+
+        <li routerLink="/portfolio" >Portfolio</li>
+
+        <li routerLink="/contact">Contacto</li>
+
+    </ul>
+</div>

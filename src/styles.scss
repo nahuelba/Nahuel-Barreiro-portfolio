@@ -1,1 +1,111 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'material-icons/iconfont/material-icons.css';
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300&display=swap');
+
+$bg-color: #F8F8F8;
+
+:root{
+    --height-navbar : 50px;
+}
+
+html, body { 
+    padding: 0; 
+    margin: 0; 
+    height: 100vh; 
+    width: 100%;
+    background-color:  $bg-color !important;
+    font-family: 'Nunito', sans-serif !important;
+    &::-webkit-scrollbar {
+        width: 12px;
+    }
+        
+    &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #e7e7e7;
+    }
+
+
+} 
+.text-italic{
+    font-style:italic;
+    opacity: 0.7;
+  }
+
+  .center{
+
+    text-align: center;
+
+}
+
+button{
+    width: 150px;
+    height: 50px;
+    background-color: black;
+    color: #F8F8F8;
+    font-style: italic;
+    border: none;
+    font-family: 'Nunito';
+    font-size:1rem;
+    -webkit-transition: width 0.4s ease-in-out;
+    -moz-transition: width 0.4s ease-in-out;
+    -o-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    cursor: pointer;
+
+}
+
+button:hover{
+    width: 180px;
+}
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+.fade {
+    background: rgba(0,0,0,.8); // example
+
+  }
+
+
+ul{
+
+    list-style: none;
+}
+
+li{
+    display:block;
+}
+
+
+.button-modal{
+    position: absolute;
+    right: 5px;
+    margin-top: -15% !important;
+    color:white !important;
+
+    border:2px solid white;
+    padding:5px;
+    padding-bottom: 0px;
+    border-radius:20%;
+
+    -webkit-transition: border-radius 0.2s ease-in-out;
+    -moz-transition: border-radius 0.2s ease-in-out;
+    -o-transition: border-radius 0.2s ease-in-out;
+    transition: border-radius 0.2s ease-in-out;
+
+
+    
+    
+}
+
+.button-modal:hover{
+    border-radius:50%;
+    text-decoration: none;
+}
+
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+}
+
